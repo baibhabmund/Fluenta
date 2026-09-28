@@ -2,6 +2,7 @@ import { Container, LinkButton, Section } from "@/components/ui";
 import { ServiceCard } from "@/components/service-card";
 import { Faq } from "@/components/faq";
 import { FluentXBanner } from "@/components/fluentx-banner";
+import { ServicesInteractiveBackground } from "@/components/services-interactive-bg";
 import { services } from "@/data/services";
 import { faqs } from "@/data/faqs";
 import { brand } from "@/lib/brand";
@@ -18,12 +19,17 @@ export default function Home() {
     <>
       <FluentXBanner />
 
-      <Section eyebrow="Services" title="What we offer" intro="Each plan lists exactly what is included and its price.">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.slice(0, 3).map((s) => <ServiceCard key={s.slug} service={s} />)}
+      <section className="relative overflow-hidden py-20 sm:py-24">
+        <ServicesInteractiveBackground />
+        <div className="relative z-10">
+          <Section eyebrow="Services" title="What we offer" intro="Each plan lists exactly what is included and its price.">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {services.slice(0, 3).map((s) => <ServiceCard key={s.slug} service={s} />)}
+            </div>
+            <div className="mt-8"><LinkButton href="/services" variant="soft">See all services</LinkButton></div>
+          </Section>
         </div>
-        <div className="mt-8"><LinkButton href="/services" variant="soft">See all services</LinkButton></div>
-      </Section>
+      </section>
 
       <Section tone="tint" eyebrow="Why FluentX" title="Simple, transparent, personal">
         <ul className="grid gap-6 sm:grid-cols-3">
