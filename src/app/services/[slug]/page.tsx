@@ -48,15 +48,23 @@ export default async function ServiceDetail({
   if (!s) notFound();
 
   const session = await auth();
+
   const enrollment = session?.user?.id
     ? await prisma.enrollment.findFirst({
-        where: { userId: session.user.id, course: { slug: s.slug } },
-        select: { id: true },
+        where: {
+          userId: session.user.id,
+          course: {
+            slug: s.slug,
+          },
+        },
+        select: {
+          id: true,
+        },
       })
     : null;
 
   return (
-    <>
+    <div className="pt-20 lg:pt-24">
       {/* Hero */}
       <PageHeader title={s.name} intro={s.short} />
 
@@ -100,8 +108,8 @@ export default async function ServiceDetail({
                 </h2>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base">
-                  Explore what is included in this service and how it can support
-                  your learning and preparation goals.
+                  Explore what is included in this service and how it can
+                  support your learning and preparation goals.
                 </p>
               </div>
 
@@ -123,7 +131,10 @@ export default async function ServiceDetail({
                             className="flex items-start gap-3 rounded-xl bg-slate-50 px-3.5 py-3 text-sm leading-5 text-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
                           >
                             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">
-                              <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                              <Check
+                                className="h-3.5 w-3.5"
+                                strokeWidth={3}
+                              />
                             </span>
 
                             <span>{f}</span>
@@ -136,8 +147,8 @@ export default async function ServiceDetail({
               ) : (
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
                   <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    Detailed inclusions for this service are shared during your
-                    free consultation.
+                    Detailed inclusions for this service are shared during
+                    your free consultation.
                   </p>
                 </div>
               )}
@@ -147,9 +158,11 @@ export default async function ServiceDetail({
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                 <Clock3 className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+
                 <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
                   Flexible support
                 </p>
+
                 <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                   Learn at a pace that works for you.
                 </p>
@@ -157,9 +170,11 @@ export default async function ServiceDetail({
 
               <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                 <MessageCircle className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+
                 <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
                   Expert guidance
                 </p>
+
                 <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                   Get guidance when you need it.
                 </p>
@@ -167,9 +182,11 @@ export default async function ServiceDetail({
 
               <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                 <ShieldCheck className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+
                 <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
                   Clear process
                 </p>
+
                 <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                   Simple enrollment and next steps.
                 </p>
@@ -250,8 +267,8 @@ export default async function ServiceDetail({
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                        Talk to us first. The consultation is free and there is
-                        no obligation to enroll.
+                        Talk to us first. The consultation is free and there
+                        is no obligation to enroll.
                       </p>
                     </div>
                   </div>
@@ -262,73 +279,73 @@ export default async function ServiceDetail({
         </div>
       </Section>
 
-      
-    {/* FAQ */}
-    <Section tone="tint">
-      <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white/70 px-5 py-10 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/40 sm:px-8 sm:py-12 lg:px-12">
-        {/* Decorative background */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-brand-200/30 blur-3xl dark:bg-brand-700/10"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-24 h-64 w-64 rounded-full bg-brand-100/40 blur-3xl dark:bg-brand-900/10"
-        />
+      {/* FAQ */}
+      <Section tone="tint">
+        <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white/70 px-5 py-10 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/40 sm:px-8 sm:py-12 lg:px-12">
+          {/* Decorative background */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-brand-200/30 blur-3xl dark:bg-brand-700/10"
+          />
 
-        <div className="relative">
-          {/* Heading */}
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-300">
-              <span
-                aria-hidden="true"
-                className="h-1.5 w-1.5 rounded-full bg-brand-500"
-              />
-              Got questions?
-            </span>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-32 -left-24 h-64 w-64 rounded-full bg-brand-100/40 blur-3xl dark:bg-brand-900/10"
+          />
 
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
-              Frequently asked questions
-            </h2>
+          <div className="relative">
+            {/* Heading */}
+            <div className="mx-auto max-w-2xl text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-300">
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-brand-500"
+                />
+                Got questions?
+              </span>
 
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base">
-              Everything you need to know before getting started. If you still
-              have questions, we&apos;re happy to help.
-            </p>
-          </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+                Frequently asked questions
+              </h2>
 
-          {/* FAQ List */}
-          <div className="mx-auto mt-8 max-w-3xl sm:mt-10">
-            <Faq items={faqs} />
-          </div>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base">
+                Everything you need to know before getting started. If you
+                still have questions, we&apos;re happy to help.
+              </p>
+            </div>
 
-          {/* Bottom CTA */}
-          <div className="relative mx-auto mt-10 max-w-3xl overflow-hidden rounded-2xl border border-brand-100 bg-brand-50/70 p-5 dark:border-brand-900/60 dark:bg-brand-950/30 sm:p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0">
-                <p className="text-sm font-extrabold text-slate-950 dark:text-white">
-                  Still have a question?
-                </p>
+            {/* FAQ List */}
+            <div className="mx-auto mt-8 max-w-3xl sm:mt-10">
+              <Faq items={faqs} />
+            </div>
 
-                <p className="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-300">
-                  Talk to us and get personalised guidance before you enroll.
-                </p>
+            {/* Bottom CTA */}
+            <div className="relative mx-auto mt-10 max-w-3xl overflow-hidden rounded-2xl border border-brand-100 bg-brand-50/70 p-5 dark:border-brand-900/60 dark:bg-brand-950/30 sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p className="text-sm font-extrabold text-slate-950 dark:text-white">
+                    Still have a question?
+                  </p>
+
+                  <p className="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-300">
+                    Talk to us and get personalised guidance before you
+                    enroll.
+                  </p>
+                </div>
+
+                <LinkButton
+                  href={`/consultation?service=${s.slug}`}
+                  variant="soft"
+                  className="shrink-0 !rounded-xl !px-4 !py-2.5 text-sm"
+                >
+                  Talk to an expert
+                  <ArrowRight className="h-4 w-4" />
+                </LinkButton>
               </div>
-
-              <LinkButton
-                href={`/consultation?service=${s.slug}`}
-                variant="soft"
-                className="shrink-0 !rounded-xl !px-4 !py-2.5 text-sm"
-              >
-                Talk to an expert
-                <ArrowRight className="h-4 w-4" />
-              </LinkButton>
             </div>
           </div>
         </div>
-      </div>
-    </Section>
-
-    </>
+      </Section>
+    </div>
   );
 }
