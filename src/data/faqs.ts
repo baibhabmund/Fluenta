@@ -9,7 +9,7 @@ export const faqs = [
   },
   {
     q: "Do I need an account?",
-    a: "No. You can browse, book a consultation and enroll as a guest with just your name, email and phone number.",
+    a: "Yes you must login or create an account to enroll in any of our plans. You can use your Google account to sign in.",
   },
   {
     q: "Which services are available?",

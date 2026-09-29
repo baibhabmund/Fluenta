@@ -47,7 +47,6 @@ const approach: Item[] = [
 const highlights = [
   { value: String(services.length), label: "Services offered" },
   { value: "24h", label: "Consultation reply" },
-  { value: "Guest", label: "Enrollment, no account" },
 ];
 
 const cardBase =
