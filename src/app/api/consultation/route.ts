@@ -3,6 +3,7 @@ import { consultationSchema } from "@/lib/validation";
 import { getService } from "@/data/services";
 import { emailConfigured, rows, sendMail } from "@/lib/email";
 import { clientIp, rateLimited } from "@/lib/rate-limit";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -48,6 +49,23 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error("Consultation email failed:", e instanceof Error ? e.message : e);
     return NextResponse.json({ error: "We couldn't send your request. Please try again or contact us directly." }, { status: 502 });
+  }
+  // Best-effort copy for the admin dashboard; must never affect the user's response.
+  try {
+    await prisma.contactRequest.create({
+      data: {
+        name: d.name,
+        email: d.email,
+        phone: d.phone,
+        serviceSlug: service.slug,
+        serviceName: service.name,
+        preferredDate: d.preferredDate || null,
+        preferredTime: d.preferredTime || null,
+        message: d.message,
+      },
+    });
+  } catch (e) {
+    console.error("Contact request save failed:", e instanceof Error ? e.message : e);
   }
   return NextResponse.json({ ok: true });
 }

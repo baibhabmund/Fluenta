@@ -16,6 +16,15 @@ Browse services/plans → free consultation form → Enroll Now → Google sign-
 - A successful, verified Razorpay payment creates the PostgreSQL enrollment.
 - Protected enrollment records are tied to the authenticated user on the server; browser-supplied user IDs are never trusted.
 
+## Admin dashboard (`/admin`)
+
+- Access is limited to the Google accounts listed in `ADMIN_EMAILS` (comma-separated); if unset, `ADMIN_EMAIL` is used. Other users get a 404.
+- **Free access**: grant any service to a user who has signed in once; revoke admin-granted access. Paid enrollments cannot be revoked here.
+- **Payments**: every verified Razorpay payment is now stored and listed with totals and search.
+- **Contact requests**: every free-consultation request is stored and listed (emails to `ADMIN_EMAIL` are unchanged).
+- Payments/requests made before this feature was deployed are not in the database.
+- After pulling this change run `npm run db:generate` and `npx prisma migrate deploy` (migration `add_admin_tracking` is purely additive).
+
 ## Setup
 
 ```bash

@@ -17,25 +17,25 @@ export default function Plans() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-b from-brand-50 via-white to-white dark:border-slate-800 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
-        <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-brand-400/25 blur-3xl" />
-        <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-brand-600/15 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-56 w-56 rounded-full bg-brand-400/25 blur-3xl sm:h-80 sm:w-80" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 h-56 w-56 rounded-full bg-brand-600/15 blur-3xl sm:h-80 sm:w-80" />
 
         <Container className="relative py-16 sm:py-24">
-          <p className="mb-4 w-fit rounded-full border border-brand-200 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-700 backdrop-blur dark:border-brand-800 dark:bg-slate-900/80 dark:text-brand-200">
+          <p className="mb-4 w-fit rounded-full border border-brand-200 bg-white/80 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-brand-700 backdrop-blur sm:px-4 sm:text-xs dark:border-brand-800 dark:bg-slate-900/80 dark:text-brand-200">
             Prices in INR
           </p>
-          <h1 className="max-w-3xl text-4xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-6xl">
+          <h1 className="max-w-3xl text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl dark:text-white">
             Plans &amp;{" "}
             <span className="bg-gradient-to-r from-brand-500 via-brand-700 to-brand-400 bg-clip-text text-transparent">
               pricing
             </span>
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:mt-5 sm:text-lg dark:text-slate-300">
             Every plan shows what is included and its price up front. Book a free consultation if you&apos;d like help choosing.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <LinkButton href="#compare" variant="outline">Compare plans</LinkButton>
-            <LinkButton href="/consultation" className="group/cta">
+          <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row">
+            <LinkButton href="#compare" variant="outline" className="min-h-11 w-full sm:w-auto">Compare plans</LinkButton>
+            <LinkButton href="/consultation" className="group/cta min-h-11 w-full sm:w-auto">
               <CalendarCheck className="h-4 w-4" aria-hidden="true" />
               Free Consultation
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" aria-hidden="true" />
@@ -46,13 +46,13 @@ export default function Plans() {
 
       {/* PLAN CARDS */}
       <Section>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {services.map((s) => {
             const f = allFeatures(s);
             return (
               <article
                 key={s.slug}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:border-brand-300 hover:shadow-2xl hover:shadow-brand-500/20 focus-within:border-brand-400 motion-safe:hover:-translate-y-1.5 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-600"
+                className="group relative flex min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:border-brand-300 hover:shadow-2xl hover:shadow-brand-500/20 focus-within:border-brand-400 sm:p-6 motion-safe:hover:-translate-y-1.5 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-600"
               >
                 <span
                   aria-hidden="true"
@@ -70,16 +70,16 @@ export default function Plans() {
                   >
                     {s.name.charAt(0)}
                   </span>
-                  <h2 className="text-xl font-extrabold leading-tight text-slate-950 dark:text-white">{s.name}</h2>
+                  <h2 className="min-w-0 break-words text-lg font-extrabold leading-tight text-slate-950 sm:text-xl dark:text-white">{s.name}</h2>
                 </div>
 
-                <p className="relative mt-5 flex items-baseline gap-2">
-                  <span className="text-4xl font-black tracking-tight text-brand-700 dark:text-brand-300">
+                <p className="relative mt-4 flex items-baseline gap-2 sm:mt-5">
+                  <span className="text-3xl font-black tracking-tight text-brand-700 sm:text-4xl dark:text-brand-300">
                     {formatINR(s.price)}
                   </span>
                 </p>
 
-                <div className="relative mt-5 border-t border-slate-100 pt-5 dark:border-slate-800">
+                <div className="relative mt-4 border-t border-slate-100 pt-4 sm:mt-5 sm:pt-5 dark:border-slate-800">
                   {f.length > 0 ? (
                     <>
                       <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
@@ -91,7 +91,7 @@ export default function Plans() {
                             <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-200">
                               <Check className="h-3 w-3" strokeWidth={3} aria-hidden="true" />
                             </span>
-                            {x}
+                            <span className="min-w-0 break-words">{x}</span>
                           </li>
                         ))}
                         {f.length > PREVIEW && (
@@ -108,17 +108,17 @@ export default function Plans() {
                   )}
                 </div>
 
-                <div className="relative mt-auto flex flex-col gap-2 pt-7">
-                  <LinkButton href={`/enroll/${s.slug}`} className="group/cta">
+                <div className="relative mt-auto flex flex-col gap-2 pt-6 sm:pt-7">
+                  <LinkButton href={`/enroll/${s.slug}`} className="group/cta min-h-11">
                     Enroll Now
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" aria-hidden="true" />
                   </LinkButton>
                   <div className="grid grid-cols-2 gap-2">
-                    <LinkButton href={`/services/${s.slug}`} variant="outline" className="!px-3">
+                    <LinkButton href={`/services/${s.slug}`} variant="outline" className="min-h-11 !px-3">
                       Details
                     </LinkButton>
-                    <LinkButton href={`/consultation?service=${s.slug}`} variant="soft" className="!px-3">
-                      <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                    <LinkButton href={`/consultation?service=${s.slug}`} variant="soft" className="min-h-11 !px-3">
+                      <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
                       Free demo
                     </LinkButton>
                   </div>
@@ -130,15 +130,45 @@ export default function Plans() {
       </Section>
 
       {/* COMPARISON */}
-      <div id="compare" className="scroll-mt-20">
+      <div id="compare" className="scroll-mt-24">
         <Section
           tone="tint"
           eyebrow="Compare"
           title="Compare plans"
-          intro="A side-by-side view of every plan. Swipe sideways on small screens."
+          intro="A side-by-side view of every plan."
         >
-          <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <table className="w-full min-w-[560px] text-left text-sm">
+          {/* Mobile: stacked list (no sideways scrolling) */}
+          <ul className="divide-y divide-slate-200 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm md:hidden dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
+            {services.map((s) => {
+              const count = allFeatures(s).length;
+              return (
+                <li key={s.slug} className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <Link
+                      href={`/services/${s.slug}`}
+                      className="block break-words font-bold text-slate-950 hover:text-brand-700 hover:underline focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-300 dark:text-white dark:hover:text-brand-300"
+                    >
+                      {s.name}
+                    </Link>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      {count > 0 ? `${count} items included` : "Shared in consultation"}
+                    </p>
+                    <p className="mt-1 font-extrabold text-brand-700 dark:text-brand-300">{formatINR(s.price)}</p>
+                  </div>
+                  <Link
+                    href={`/enroll/${s.slug}`}
+                    className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-brand-200 bg-brand-50 px-3.5 text-sm font-bold text-brand-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-300 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-300"
+                  >
+                    Enroll <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Tablet/desktop: table */}
+          <div className="hidden overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm md:block dark:border-slate-800 dark:bg-slate-900">
+            <table className="w-full text-left text-sm">
               <caption className="sr-only">Plan comparison</caption>
               <thead>
                 <tr className="bg-brand-50 text-slate-900 dark:bg-slate-800 dark:text-slate-100">
@@ -166,7 +196,7 @@ export default function Plans() {
                           {s.name}
                         </Link>
                       </th>
-                      <td className="p-4 font-extrabold text-brand-700 dark:text-brand-300">{formatINR(s.price)}</td>
+                      <td className="whitespace-nowrap p-4 font-extrabold text-brand-700 dark:text-brand-300">{formatINR(s.price)}</td>
                       <td className="p-4 text-slate-700 dark:text-slate-200">
                         {count > 0 ? `${count} items` : "Shared in consultation"}
                       </td>
@@ -194,20 +224,20 @@ export default function Plans() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-[0.12] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:22px_22px]"
         />
-        <Container className="relative flex flex-col gap-6 py-14 sm:py-16 lg:flex-row lg:items-center lg:justify-between">
+        <Container className="relative flex flex-col gap-6 py-12 sm:py-16 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-xl">
-            <h2 className="text-3xl font-black tracking-tight text-white">Not sure which plan to pick?</h2>
+            <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Not sure which plan to pick?</h2>
             <p className="mt-3 text-base leading-7 text-white/85">
               Talk to us first. We&apos;ll reply within 24 hours with a meeting link.
             </p>
           </div>
           <LinkButton
             href="/consultation"
-            className="group/cta !bg-white !px-7 !py-3.5 !text-brand-800 shadow-xl shadow-black/20 hover:!bg-brand-50"
+            className="group/cta min-h-12 w-full text-center !bg-white !px-5 !py-3.5 !text-brand-800 shadow-xl shadow-black/20 hover:!bg-brand-50 sm:w-auto sm:!px-7 lg:shrink-0"
           >
-            <CalendarCheck className="h-4 w-4" aria-hidden="true" />
+            <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden="true" />
             Schedule Free Consultation
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover/cta:translate-x-1" aria-hidden="true" />
           </LinkButton>
         </Container>
       </section>

@@ -8,10 +8,12 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+import { auth } from "@/auth";
 import { PageHeader, Section, LinkButton } from "@/components/ui";
 import { Faq } from "@/components/faq";
 import { faqs } from "@/data/faqs";
 import { getService, services, formatINR } from "@/data/services";
+import { prisma } from "@/lib/prisma";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -44,6 +46,14 @@ export default async function ServiceDetail({
   const s = getService((await params).slug);
 
   if (!s) notFound();
+
+  const session = await auth();
+  const enrollment = session?.user?.id
+    ? await prisma.enrollment.findFirst({
+        where: { userId: session.user.id, course: { slug: s.slug } },
+        select: { id: true },
+      })
+    : null;
 
   return (
     <>
@@ -199,21 +209,33 @@ export default async function ServiceDetail({
                 </p>
 
                 <div className="mt-6 space-y-3">
-                  <LinkButton
-                    href={`/enroll/${s.slug}`}
-                    className="w-full !py-3.5"
-                  >
-                    Enroll Now
-                    <ArrowRight className="h-4 w-4" />
-                  </LinkButton>
+                  {enrollment ? (
+                    <div
+                      role="status"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300"
+                    >
+                      <Check className="h-4 w-4" strokeWidth={3} />
+                      Already Enrolled
+                    </div>
+                  ) : (
+                    <LinkButton
+                      href={`/enroll/${s.slug}`}
+                      className="w-full !py-3.5"
+                    >
+                      Enroll Now
+                      <ArrowRight className="h-4 w-4" />
+                    </LinkButton>
+                  )}
 
-                  <LinkButton
-                    href={`/consultation?service=${s.slug}`}
-                    variant="soft"
-                    className="w-full !py-3.5"
-                  >
-                    Schedule Free Consultation
-                  </LinkButton>
+                  {!enrollment && (
+                    <LinkButton
+                      href={`/consultation?service=${s.slug}`}
+                      variant="soft"
+                      className="w-full !py-3.5"
+                    >
+                      Schedule Free Consultation
+                    </LinkButton>
+                  )}
                 </div>
 
                 <div className="mt-6 border-t border-slate-200 pt-5 dark:border-slate-800">

@@ -16,6 +16,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   enrollments   Enrollment[]
+  payments      Payment[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -76,6 +77,9 @@ model Enrollment {
   id        String   @id @default(cuid())
   userId    String
   courseId  String
+  /// "PAID" (Razorpay) or "ADMIN_GRANT" (free access given from the admin dashboard)
+  source    String   @default("PAID")
+  grantedBy String?
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -83,4 +87,41 @@ model Enrollment {
   @@unique([userId, courseId])
   @@index([userId])
   @@index([courseId])
+}
+
+/// Record of every verified Razorpay payment (written by /api/payments/verify).
+model Payment {
+  id          String   @id @default(cuid())
+  userId      String?
+  name        String
+  email       String
+  phone       String
+  courseSlug  String
+  serviceName String
+  amount      Int
+  currency    String   @default("INR")
+  orderId     String   @unique
+  paymentId   String   @unique
+  status      String   @default("PAID")
+  createdAt   DateTime @default(now())
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+/// Copy of every free-consultation request (the email to ADMIN_EMAIL is still sent as before).
+model ContactRequest {
+  id            String   @id @default(cuid())
+  name          String
+  email         String
+  phone         String
+  serviceSlug   String
+  serviceName   String
+  preferredDate String?
+  preferredTime String?
+  message       String   @db.Text
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
 }

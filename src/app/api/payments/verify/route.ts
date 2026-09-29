@@ -48,6 +48,27 @@ export async function POST(req: Request) {
       create: { userId: session.user.id, courseId: course.id },
     });
 
+    // Best-effort payment record for the admin dashboard (idempotent on paymentId).
+    try {
+      await prisma.payment.upsert({
+        where: { paymentId },
+        update: {},
+        create: {
+          userId: session.user.id,
+          name: order.notes.name,
+          email: order.notes.email,
+          phone: order.notes.phone,
+          courseSlug: service.slug,
+          serviceName: service.name,
+          amount: service.price,
+          orderId,
+          paymentId,
+        },
+      });
+    } catch (e) {
+      console.error("Payment record failed:", e instanceof Error ? e.message : e);
+    }
+
     const details = {
       name: order.notes.name,
       email: order.notes.email,

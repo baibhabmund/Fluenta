@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BookOpen, LogOut } from "lucide-react";
+import { ArrowRight, BookOpen, LogOut, ShieldCheck } from "lucide-react";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { formatINR } from "@/data/services";
 import { Container, Section } from "@/components/ui";
+import { isAdminEmail } from "@/lib/admin";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -39,6 +40,12 @@ export default async function Dashboard() {
             </h1>
             {session.user.email && <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{session.user.email}</p>}
           </div>
+          <div className="flex flex-wrap items-center gap-2">
+          {isAdminEmail(session.user.email) && (
+            <Link href="/admin" className="inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-bold text-brand-700 transition hover:bg-brand-100 dark:border-brand-800 dark:bg-brand-950/40 dark:text-brand-300">
+              <ShieldCheck className="h-4 w-4" /> Admin
+            </Link>
+          )}
           <form
             action={async () => {
               "use server";
@@ -49,6 +56,7 @@ export default async function Dashboard() {
               <LogOut className="h-4 w-4" /> Sign out
             </button>
           </form>
+          </div>
         </div>
 
         <div className="mt-10">
