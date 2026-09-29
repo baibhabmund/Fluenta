@@ -15,7 +15,7 @@ const input =
 
 type Details = { name: string; email: string; phone: string; service: string; amount: string; orderId: string; paymentId: string };
 
-export function EnrollForm({ slug, name: serviceName, price }: { slug: string; name: string; price: number }) {
+export function EnrollForm({ slug, name: serviceName, price, userName, userEmail }: { slug: string; name: string; price: number; userName: string; userEmail: string }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState<{ details: Details; emailSent: boolean } | null>(null);
@@ -83,8 +83,8 @@ export function EnrollForm({ slug, name: serviceName, price }: { slug: string; n
           <p className="font-bold">{serviceName}</p>
           <p className="text-2xl font-extrabold text-brand-700 dark:text-brand-300">{formatINR(price)}</p>
         </div>
-        <label className="text-sm font-semibold">Full name *<input name="name" required minLength={2} autoComplete="name" className={input} /></label>
-        <label className="text-sm font-semibold">Email *<input name="email" type="email" required autoComplete="email" className={input} /></label>
+        <label className="text-sm font-semibold">Full name *<input name="name" required minLength={2} autoComplete="name" defaultValue={userName} className={input} /></label>
+        <label className="text-sm font-semibold">Google account email<input name="email" type="email" value={userEmail} readOnly className={`${input} cursor-not-allowed opacity-80`} /></label>
         <label className="text-sm font-semibold">Phone *<input name="phone" type="tel" required autoComplete="tel" className={input} /></label>
         {msg && <p role="alert" className="text-sm font-semibold text-red-600 dark:text-red-400">{msg}</p>}
         <button type="submit" disabled={busy} className={buttonClass("primary", "w-full sm:w-fit")}>

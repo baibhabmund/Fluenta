@@ -4,6 +4,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ThemeProvider, ThemeScript } from "@/components/theme-provider";
 import { brand } from "@/lib/brand";
+import { AuthSessionProvider } from "@/components/auth-session-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(brand.url),
@@ -105,13 +106,15 @@ export default function Layout({
       </head>
 
       <body>
-        <ThemeProvider>
-          <Navigation />
+        <AuthSessionProvider>
+          <ThemeProvider>
+            <Navigation />
 
-          <main>{children}</main>
+            <main>{children}</main>
 
-          <Footer />
-        </ThemeProvider>
+            <Footer />
+          </ThemeProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );

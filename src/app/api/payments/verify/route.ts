@@ -4,10 +4,16 @@ import { fetchOrder, verifySignature } from "@/lib/razorpay";
 import { getService, formatINR } from "@/data/services";
 import { emailConfigured, rows, sendMail } from "@/lib/email";
 import { clientIp, rateLimited } from "@/lib/rate-limit";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session?.user?.id || !session.user.email) {
+    return NextResponse.json({ error: "Please sign in before confirming your enrollment." }, { status: 401 });
+  }
   if (rateLimited(`verify:${clientIp(req)}`, 20, 10 * 60_000)) {
     return NextResponse.json({ error: "Too many requests." }, { status: 429 });
   }
@@ -25,6 +31,23 @@ export async function POST(req: Request) {
     if (!service || order.amount !== service.price * 100) {
       return NextResponse.json({ error: "Order details mismatch." }, { status: 400 });
     }
+    const userId = order.notes?.userId;
+    if (userId !== session.user.id || order.notes?.email !== session.user.email) {
+      return NextResponse.json({ error: "This payment does not belong to the signed-in account." }, { status: 403 });
+    }
+
+    const course = await prisma.course.upsert({
+      where: { slug: service.slug },
+      update: { title: service.name, description: service.short, price: service.price, published: true },
+      create: { slug: service.slug, title: service.name, description: service.short, price: service.price, published: true },
+    });
+
+    await prisma.enrollment.upsert({
+      where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
+      update: {},
+      create: { userId: session.user.id, courseId: course.id },
+    });
+
     const details = {
       name: order.notes.name,
       email: order.notes.email,

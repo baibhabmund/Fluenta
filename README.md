@@ -1,34 +1,70 @@
 # FluentX — Education Services Website
 
-Next.js 15 + TypeScript + Tailwind 4. No database, no accounts.
+Next.js 15 + TypeScript + Tailwind 4 + PostgreSQL + Prisma + Google authentication.
 
-**Flow:** browse services/plans → free consultation form (emailed to `ADMIN_EMAIL`, reply-to = applicant) → Enroll Now → Razorpay Checkout → server-side signature verification → confirmation page + emails.
+## Existing public flow
+
+Browse services/plans → free consultation form → Enroll Now → Google sign-in if needed → Razorpay Checkout → server-side payment verification → database enrollment → confirmation emails.
+
+## Authentication and dashboard
+
+- Google is the only normal-user authentication method.
+- A user account is created automatically on first Google sign-in.
+- `/dashboard` is protected server-side.
+- The dashboard reads enrolled courses and available/recommended courses from PostgreSQL.
+- `/enroll/[slug]` is protected server-side.
+- A successful, verified Razorpay payment creates the PostgreSQL enrollment.
+- Protected enrollment records are tied to the authenticated user on the server; browser-supplied user IDs are never trusted.
 
 ## Setup
-```
+
+```bash
 npm install
-cp .env.example .env.local   # fill values
-npm run dev
 ```
+
+Create `.env.local` from `.env.example` and set:
+
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_APP_URL` | Site URL (metadata, sitemap) |
-| `ADMIN_EMAIL` | Receives consultation & enrollment emails |
-| `SMTP_URL` | e.g. `smtps://user:app-password@smtp.gmail.com:465` |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `AUTH_SECRET` | Long random secret used by Auth.js |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `ADMIN_EMAIL` | Receives consultation + enrollment emails |
+| `SMTP_URL` | SMTP connection URL |
 | `EMAIL_FROM` | Optional sender |
-| `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Server-only. Use `rzp_test_` keys in dev |
+| `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Razorpay server configuration |
 
-Without SMTP the consultation API returns an honest 503 (no fake success). Without Razorpay keys the order API returns 503.
+For Google OAuth, add this authorized redirect URI in Google Cloud for local development:
 
-## Editing content
-- Services, prices, features: `src/data/services.ts` (single source; server uses it for order amounts).
-- FAQs: `src/data/faqs.ts`. Brand/contact: `src/lib/brand.ts`. About copy: `src/app/about/page.tsx`.
+`http://localhost:3000/api/auth/callback/google`
 
-## Payments
-Order created server-side using the price from `services.ts`. After checkout, `/api/payments/verify` checks the HMAC signature, then fetches the order from Razorpay and confirms amount/service before showing success or sending emails. No card data is stored. No DB: reconciliation is via the Razorpay dashboard (order notes hold name/email/phone/service). Repeated verify calls are harmless but may re-send emails.
+For production, add the equivalent callback URL for the deployed domain.
 
-## Deploy (Vercel)
-Import repo, set the env vars above, deploy. The in-memory rate limiter is per-instance; use Upstash/Redis for strict limits.
+## Database
+
+After setting `DATABASE_URL`:
+
+```bash
+npm run db:generate
+npm run db:migrate -- --name add_auth_courses
+npm run db:seed
+```
+
+The seed creates the existing FluentX services as PostgreSQL course records. Existing public service content remains the source for the public pages; the database is used for accounts, courses and enrollments.
+
+Never run `prisma migrate reset` on a database containing real data.
+
+## Development
+
+```bash
+npm run dev
+```
 
 ## Checks
-`npm run typecheck`, `npm run lint`, `npm run build`.
+
+```bash
+npm run typecheck
+npm run build
+```

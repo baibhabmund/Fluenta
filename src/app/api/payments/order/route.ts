@@ -3,10 +3,15 @@ import { enrollSchema } from "@/lib/validation";
 import { getService } from "@/data/services";
 import { createOrder, razorpayConfigured } from "@/lib/razorpay";
 import { clientIp, rateLimited } from "@/lib/rate-limit";
+import { auth } from "@/auth";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session?.user?.id || !session.user.email) {
+    return NextResponse.json({ error: "Please sign in with Google before enrolling." }, { status: 401 });
+  }
   if (rateLimited(`order:${clientIp(req)}`, 10, 10 * 60_000)) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
@@ -21,7 +26,13 @@ export async function POST(req: Request) {
     const order = await createOrder({
       amountPaise: service.price * 100,
       receipt: `fx_${Date.now().toString(36)}`,
-      notes: { name: d.name, email: d.email, phone: d.phone, service: service.slug },
+      notes: {
+        name: d.name,
+        email: session.user.email,
+        phone: d.phone,
+        service: service.slug,
+        userId: session.user.id,
+      },
     });
     return NextResponse.json({
       orderId: order.id,
