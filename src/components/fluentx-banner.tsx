@@ -215,9 +215,7 @@ export function FluentXBanner() {
   const accentLight = isDark ? "#2dd4bf" : "#14b8a6";
 
   const shellStyle = {
-    background: isDark
-      ? "linear-gradient(135deg, #061018 0%, #081923 48%, #06141d 100%)"
-      : "linear-gradient(135deg, #f0fdfa 0%, #ecfeff 42%, #f8fafc 100%)",
+    background: "transparent",
     "--fx-accent": accent,
     "--fx-accent-light": accentLight,
   } as CSSProperties;
@@ -492,7 +490,14 @@ export function FluentXBanner() {
       className="fluentx-hero-shell relative isolate overflow-hidden"
       style={shellStyle}
     >
-      <div className="fluentx-banner-bg pointer-events-none absolute inset-0" aria-hidden="true">
+      <div
+        className="fluentx-banner-bg pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          maskImage: "linear-gradient(to bottom, black calc(100% - 10rem), transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black calc(100% - 10rem), transparent 100%)",
+        }}
+      >
         <svg
           ref={svgRef}
           viewBox={`0 0 ${W} ${H}`}
@@ -571,7 +576,7 @@ export function FluentXBanner() {
       </div>
 
       {/* Hero content */}
-      <Container className="relative z-10 py-16 sm:py-24">
+      <Container className="relative z-10 py-20 sm:py-24">
         <div className="max-w-3xl">
           <p
             className={`mb-3 text-xs font-bold uppercase tracking-widest ${

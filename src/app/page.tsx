@@ -84,6 +84,13 @@ const cardBase =
 const iconBox =
   "grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-700 ring-1 ring-brand-100 transition-all duration-300 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600 motion-safe:group-hover:scale-105 dark:bg-brand-950/50 dark:text-brand-300 dark:ring-brand-900/60 dark:group-hover:bg-brand-500 dark:group-hover:text-white";
 
+const sectionBackgroundMask: React.CSSProperties = {
+  maskImage:
+    "linear-gradient(to bottom, transparent, black 4rem, black calc(100% - 4rem), transparent)",
+  WebkitMaskImage:
+    "linear-gradient(to bottom, transparent, black 4rem, black calc(100% - 4rem), transparent)",
+};
+
 /* ------------------------------------------------------------------ */
 /* Small building blocks                                               */
 /* ------------------------------------------------------------------ */
@@ -143,39 +150,47 @@ function ServicesSection() {
 
 function WhySection() {
   return (
-    <Section
-      tone="tint"
-      eyebrow="Why FluentX"
-      title="Built around your learning journey"
-      intro="A simple, transparent approach to help you choose the right preparation path and get started with confidence."
-    >
-      <ul className="grid gap-6 md:grid-cols-3">
-        {whyFluentX.map(({ number, title, description, icon: Icon }) => (
-          <li key={number}>
-            <article className={`${cardBase} p-7`}>
-              <CardDecor />
-              <div className="relative flex h-full flex-col">
-                <div className="flex items-start justify-between">
-                  <span className={iconBox}>
-                    <Icon className="h-6 w-6" strokeWidth={1.8} aria-hidden="true" />
-                  </span>
-                  <span className="text-xs font-black tracking-[0.2em] text-slate-300 dark:text-slate-600">
-                    {number}
-                  </span>
-                </div>
+    <div className="relative isolate">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-brand-50/60 dark:bg-slate-900/40"
+        style={sectionBackgroundMask}
+      />
+      <div className="relative z-10">
+        <Section
+          eyebrow="Why FluentX"
+          title="Built around your learning journey"
+          intro="A simple, transparent approach to help you choose the right preparation path and get started with confidence."
+        >
+          <ul className="grid gap-6 md:grid-cols-3">
+            {whyFluentX.map(({ number, title, description, icon: Icon }) => (
+              <li key={number}>
+                <article className={`${cardBase} p-7`}>
+                  <CardDecor />
+                  <div className="relative flex h-full flex-col">
+                    <div className="flex items-start justify-between">
+                      <span className={iconBox}>
+                        <Icon className="h-6 w-6" strokeWidth={1.8} aria-hidden="true" />
+                      </span>
+                      <span className="text-xs font-black tracking-[0.2em] text-slate-300 dark:text-slate-600">
+                        {number}
+                      </span>
+                    </div>
 
-                <h3 className="mt-6 text-xl font-black tracking-tight text-slate-950 dark:text-white">
-                  {title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  {description}
-                </p>
-              </div>
-            </article>
-          </li>
-        ))}
-      </ul>
-    </Section>
+                    <h3 className="mt-6 text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                      {title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {description}
+                    </p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      </div>
+    </div>
   );
 }
 
@@ -247,13 +262,18 @@ function ProcessSection() {
 
 function FaqSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-brand-50/60 dark:from-slate-950 dark:via-slate-900 dark:to-brand-950/30">
+    <section className="relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-brand-400/15 blur-3xl"
+        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-slate-50 via-white to-brand-50/60 dark:from-slate-950 dark:via-slate-900 dark:to-brand-950/30"
+        style={sectionBackgroundMask}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 top-10 z-0 h-80 w-80 rounded-full bg-brand-400/15 blur-3xl"
       />
 
-      <Container className="relative grid gap-10 py-14 sm:py-20 lg:grid-cols-5 lg:gap-14">
+      <Container className="relative z-10 grid gap-10 py-14 sm:py-20 lg:grid-cols-5 lg:gap-14">
         {/* Left: heading + help card */}
         <div className="lg:col-span-2 lg:sticky lg:top-28 lg:self-start">
           <p className="mb-3 w-fit rounded-full border border-brand-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-brand-700 dark:border-brand-800 dark:bg-slate-900 dark:text-brand-200">
@@ -301,7 +321,7 @@ function FaqSection() {
                   aria-hidden="true"
                 />
               </summary>
-              <div className="px-5 pb-5 pl-[4.25rem] pr-6 text-sm leading-relaxed text-slate-600 motion-safe:animate-[fadeIn_.3s_ease-out] dark:text-slate-300 sm:text-base">
+              <div className="px-5 pb-5 pl-12 pr-5 text-sm leading-relaxed text-slate-600 motion-safe:animate-[fadeIn_.3s_ease-out] dark:text-slate-300 sm:pl-[4.25rem] sm:pr-6 sm:text-base">
                 {f.a}
               </div>
             </details>
@@ -367,19 +387,17 @@ function FinalCta() {
 
 export default function Home() {
   return (
-    <>
+    <div className="relative isolate overflow-hidden">
+      <HomeAmbientBackground />
       <FluentXBanner />
 
-      <div className="relative overflow-hidden">
-        <HomeAmbientBackground />
-        <div className="relative z-10">
-          <ServicesSection />
-          <WhySection />
-          <ProcessSection />
-          <FaqSection />
-          <FinalCta />
-        </div>
+      <div className="relative z-10">
+        <ServicesSection />
+        <WhySection />
+        <ProcessSection />
+        <FaqSection />
+        <FinalCta />
       </div>
-    </>
+    </div>
   );
 }
